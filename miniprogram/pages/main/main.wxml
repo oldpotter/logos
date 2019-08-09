@@ -1,0 +1,49 @@
+<!--miniprogram/pages/main/main.wxml-->
+<view class='container'>
+  <block wx:if='{{ !images }}'>
+    <wux-white-space body-style="height: 45vh;" />
+    <vant-button plain type="primary" bind:click='onChooseImage'>选择底图</vant-button>
+  </block>
+
+  <block wx:else>
+    <!-- 当前图片 -->
+    <view style='background: #f8f8f9;'>
+      <image style='position: absolute; height: {{ imageRate * 100 }}vw; width: 100vw;' mode='aspectFit' src='{{ currentImage }}'></image>
+      <!-- logos -->
+      <movable-area style="height: {{ imageRate * 100 }}vw;; width: 100vw;" scale-area>
+        <block wx:for='{{ logos }}' wx:for-item='logo' wx:key='{{logo.path}}'>
+          <movable-view style="height: {{ logo.rate * 20  }}vw; width: 20vw;" direction="all" bindchange="onLogoChange" bindscale="onLogoScale" scale scale-min="0.5" scale-max="4" scale-value="2">
+            <image style='height: {{ logo.rate * 20  }}vw; width: 20vw;' src='{{ logo.path }}' mode='aspectFill'></image>
+          </movable-view>
+        </block>
+      </movable-area>
+
+
+    </view>
+    <wux-white-space size="large" />
+    <!-- 所有图片 -->
+    <scroll-view scroll-x>
+      <view style='display: flex; flex-direction: row; width: {{ images.length * 20 + 20 }}vw; background: #f8f8f9; padding: 20rpx;'>
+        <view bindtap='onClickAddImage' style='width:20vw; height: 20vw; background: white;display: flex; justify-content: center; align-items: center;'>
+          <vant-icon name='plus' size='1.2em'></vant-icon>
+        </view>
+        <block wx:for='{{images}}' wx:key='*this'>
+          <image bindtap='onClickImage' data-index='{{index}}' lazy-load mode='aspectFill' src='{{ item }}' style='width: 20vw; height: 20vw;'></image>
+        </block>
+      </view>
+    </scroll-view>
+    <wux-white-space size="large" />
+
+    <view class='center'>
+      <vant-button plain type="primary" bind:click='onChooseLogo'>选择一个logo</vant-button>
+    </view>
+
+    <wux-white-space size="large" />
+    <view class='center'>
+      <vant-button plain type="primary" bind:click='onClickSave'>保存图片</vant-button>
+    </view>
+  </block>
+</view>
+<block wx:if='{{processing}}'>
+  <canvas style='position: fixed; opacity: 0; width: {{ canvasW }}px; height: {{ canvasH }}px;' canvas-id='canvas'></canvas>
+</block>

@@ -1,0 +1,21 @@
+{
+	"pages": [
+		"pages/main/main",
+		"pages/test/test"
+	],
+	"window": {
+		"backgroundColor": "#F6F6F6",
+		"backgroundTextStyle": "light",
+		"navigationBarBackgroundColor": "#F6F6F6",
+		"navigationBarTitleText": "批量图片LOGO",
+		"navigationBarTextStyle": "black"
+	},
+	"sitemapLocation": "sitemap.json",
+	"usingComponents": {
+		"wux-wing-blank": "./miniprogram_npm/wux-weapp/wing-blank/index",
+		"wux-white-space": "./miniprogram_npm/wux-weapp/white-space/index",
+		"wux-upload": "./miniprogram_npm/wux-weapp/upload/index",
+		"vant-button": "./miniprogram_npm/vant-weapp/button/index",
+		"vant-icon": "./miniprogram_npm/vant-weapp/icon/index"
+	}
+}

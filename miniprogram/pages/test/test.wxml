@@ -1,0 +1,4 @@
+<!--miniprogram/pages/test/test.wxml-->
+<text>miniprogram/pages/test/test.wxml</text>
+<canvas style='opacity: 0q; background: blue; width: {{w}}px; height: {{h}}px' canvas-id='test'></canvas>
+<image src='{{ src }}'></image>
