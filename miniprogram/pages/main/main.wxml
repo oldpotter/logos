@@ -1,4 +1,7 @@
 <!--miniprogram/pages/main/main.wxml-->
+
+
+
 <view class='container'>
   <block wx:if='{{ !images }}'>
     <wux-white-space body-style="height: 45vh;" />
@@ -8,20 +11,51 @@
   <block wx:else>
     <!-- 当前图片 -->
     <view style='background: #f8f8f9;'>
-      <image style='position: absolute; height: {{ imageRate * 100 }}vw; width: 100vw;' mode='aspectFit' src='{{ currentImage }}'></image>
+      <image id='current-img' style='position: absolute; height: {{ imageRate * 100 }}vw; width: 100vw;' mode='aspectFit' src='{{ currentImage }}'></image>
       <!-- logos -->
-      <movable-area style="height: {{ imageRate * 100 }}vw;; width: 100vw;" scale-area>
+      <movable-area id='move-area' style="height: {{ imageRate * 100 }}vw;; width: 100vw;" scale-area>
         <block wx:for='{{ logos }}' wx:for-item='logo' wx:key='{{logo.path}}'>
-          <movable-view style="height: {{ logo.rate * 20  }}vw; width: 20vw;" direction="all" bindchange="onLogoChange" bindscale="onLogoScale" scale scale-min="0.5" scale-max="4" scale-value="2">
-            <image style='height: {{ logo.rate * 20  }}vw; width: 20vw;' src='{{ logo.path }}' mode='aspectFill'></image>
+          <movable-view id='move-view-{{index}}' style="height: {{ 10 * logo.rate  }}vw; width: {{ 10 }}vw;" direction="all" bindchange="onLogoChange" bindscale="onLogoScale" scale scale-min="0.5" scale-max="4" scale-value="1" animation="{{ false }}" x="{{ util.getPosition(logo.location, currentImageWidth,currentImageHeight,currentImageWidth / 10, currentImageWidth / 10 * logo.rate).x }}"
+            y="{{ util.getPosition(logo.location, currentImageWidth,currentImageHeight,currentImageWidth / 10, currentImageWidth / 10 * logo.rate).y }}">
+            <image style='height: {{ 10 * logo.rate  }}vw; width: {{ 10 }}vw;' src='{{ logo.path }}' mode='aspectFill'></image>
           </movable-view>
         </block>
       </movable-area>
-
-
+      <wxs module="util">
+        var getPosition = function(type, imgW, imgH, logoW, logoH) {
+          var margin = 10
+          switch (type) {
+            case 'ul':
+              x = margin
+              y = margin
+              break;
+            case 'ur':
+              x = imgW - margin - logoW
+              y = margin
+              break;
+            case 'bl':
+              x = margin
+              y = imgH - margin - logoH
+              break;
+            case 'br':
+              x = imgW - margin - logoW
+              y = imgH - margin - logoH
+              break;
+          }
+          return {
+            x,
+            y
+          }
+        }
+        module.exports = {
+          getPosition: getPosition,
+        }
+      </wxs>
     </view>
     <wux-white-space size="large" />
     <!-- 所有图片 -->
+    <text class="desc-text">所有底图</text>
+    <wux-white-space />
     <scroll-view scroll-x>
       <view style='display: flex; flex-direction: row; width: {{ images.length * 20 + 20 }}vw; background: #f8f8f9; padding: 20rpx;'>
         <view bindtap='onClickAddImage' style='width:20vw; height: 20vw; background: white;display: flex; justify-content: center; align-items: center;'>
@@ -34,9 +68,19 @@
     </scroll-view>
     <wux-white-space size="large" />
 
-    <view class='center'>
-      <vant-button plain type="primary" bind:click='onChooseLogo'>选择一个logo</vant-button>
-    </view>
+    <!-- 所有LOGO -->
+    <text class="desc-text">所有Logo</text>
+    <wux-white-space />
+    <scroll-view scroll-x>
+      <view style='display: flex; flex-direction: row; width: {{ logos.length * 15 + 15 }}vw; background: #f8f8f9; padding: 15rpx;'>
+        <view bindtap='onClickAddLogo' style='width:15vw; height: 15vw; background: white;display: flex; justify-content: center; align-items: center;'>
+          <vant-icon name='plus' size='1.2em'></vant-icon>
+        </view>
+        <block wx:for='{{logos}}' wx:key='*this'>
+          <image bindtap='onClickLogo' data-index='{{index}}' lazy-load mode='aspectFill' src='{{ item.path }}' style='width: 15vw; height: 15vw;'></image>
+        </block>
+      </view>
+    </scroll-view>
 
     <wux-white-space size="large" />
     <view class='center'>

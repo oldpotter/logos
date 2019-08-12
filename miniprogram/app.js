@@ -10,15 +10,18 @@ App({
       })
     }
 		this.globalData = {}
+		
 		const _this = this
 		wx.getSystemInfo({
 			success: function(res) {
-				_this.globalData.screenWidth = res.screenWidth * res.pixelRatio
+				// console.log(res)
+				_this.globalData.screenWidth = res.screenWidth
+				_this.globalData.screenHeight = res.screenHeight
+				_this.globalData.pixelRatio = res.pixelRatio
+				// _this.globalData.screenWidth = res.screenWidth * res.pixelRatio
 			},
 			fail: function(res) {},
 			complete: function(res) {},
-		})
-
-    
+		}) 
   }
 })

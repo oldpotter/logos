@@ -11,10 +11,7 @@
   flex-direction: column;
   align-items: center;
 	justify-content: center;
-	
 }
-
-
 
 button {
   background: initial;
@@ -26,4 +23,10 @@ button:focus{
 
 button::after{
   border: none;
+}
+
+.desc-text{
+	color: #80848f;
+	font-size: 16px;
+	text-align: center;
 }
