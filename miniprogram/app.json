@@ -12,10 +12,13 @@
 	},
 	"sitemapLocation": "sitemap.json",
 	"usingComponents": {
+		"wux-popover": "./miniprogram_npm/wux-weapp/popover/index",
 		"wux-wing-blank": "./miniprogram_npm/wux-weapp/wing-blank/index",
 		"wux-white-space": "./miniprogram_npm/wux-weapp/white-space/index",
 		"wux-upload": "./miniprogram_npm/wux-weapp/upload/index",
 		"vant-button": "./miniprogram_npm/vant-weapp/button/index",
-		"vant-icon": "./miniprogram_npm/vant-weapp/icon/index"
+		"vant-icon": "./miniprogram_npm/vant-weapp/icon/index",
+		"vant-row": "./miniprogram_npm/vant-weapp/row/index",
+		"vant-col": "./miniprogram_npm/vant-weapp/col/index"
 	}
 }

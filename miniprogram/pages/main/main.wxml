@@ -1,7 +1,4 @@
 <!--miniprogram/pages/main/main.wxml-->
-
-
-
 <view class='container'>
   <block wx:if='{{ !images }}'>
     <wux-white-space body-style="height: 45vh;" />
@@ -15,13 +12,13 @@
       <!-- logos -->
       <movable-area id='move-area' style="height: {{ imageRate * 100 }}vw;; width: 100vw;" scale-area>
         <block wx:for='{{ logos }}' wx:for-item='logo' wx:key='{{logo.path}}'>
-          <movable-view id='move-view-{{index}}' style="height: {{ 10 * logo.rate  }}vw; width: {{ 10 }}vw;" direction="all" bindchange="onLogoChange" bindscale="onLogoScale" scale scale-min="0.5" scale-max="4" scale-value="1" animation="{{ false }}" x="{{ util.getPosition(logo.location, currentImageWidth,currentImageHeight,currentImageWidth / 10, currentImageWidth / 10 * logo.rate).x }}"
-            y="{{ util.getPosition(logo.location, currentImageWidth,currentImageHeight,currentImageWidth / 10, currentImageWidth / 10 * logo.rate).y }}">
-            <image style='height: {{ 10 * logo.rate  }}vw; width: {{ 10 }}vw;' src='{{ logo.path }}' mode='aspectFill'></image>
+          <movable-view id='move-view-{{index}}' style="height: {{ 10 * logo.rate * logo.scale  }}vw; width: {{ 10 * logo.scale}}vw;" direction="all" bindchange="onLogoChange" data-index='{{ index }}' bindscale="onLogoScale" animation="{{ false }}" x="{{ positionUtil.getPosition(logo.location, currentImageWidth,currentImageHeight,currentImageWidth / 10 * logo.scale, currentImageWidth / 10 * logo.rate * logo.scale).x }}"
+            y="{{ positionUtil.getPosition(logo.location, currentImageWidth,currentImageHeight,currentImageWidth / 10 * logo.scale, currentImageWidth / 10 * logo.rate * logo.scale).y }}">
+            <image style='height: {{ 10 * logo.rate *logo.scale  }}vw; width: {{ 10*logo.scale }}vw;' src='{{ logo.path }}' mode='aspectFill'></image>
           </movable-view>
         </block>
       </movable-area>
-      <wxs module="util">
+      <wxs module="positionUtil">
         var getPosition = function(type, imgW, imgH, logoW, logoH) {
           var margin = 10
           switch (type) {
@@ -62,7 +59,7 @@
           <vant-icon name='plus' size='1.2em'></vant-icon>
         </view>
         <block wx:for='{{images}}' wx:key='*this'>
-          <image bindtap='onClickImage' data-index='{{index}}' lazy-load mode='aspectFill' src='{{ item }}' style='width: 20vw; height: 20vw;'></image>
+          <image bindtap='onClickImage' data-index='{{index}}' lazy-load mode='aspectFill' src='{{ item }}' style='width: 20vw; height: 20vw; {{ currentImageIndex == index ?"border-bottom: 10rpx solid #5cadff; ":"" }}'></image>
         </block>
       </view>
     </scroll-view>
@@ -77,14 +74,38 @@
           <vant-icon name='plus' size='1.2em'></vant-icon>
         </view>
         <block wx:for='{{logos}}' wx:key='*this'>
-          <image bindtap='onClickLogo' data-index='{{index}}' lazy-load mode='aspectFill' src='{{ item.path }}' style='width: 15vw; height: 15vw;'></image>
+          <image bindtap='onClickLogo' data-index='{{index}}' lazy-load mode='aspectFill' src='{{ item.path }}' style='width: 15vw; height: 15vw; {{ currentLogoIndex == index ?"border-bottom: 6rpx solid #ff9900; ":"" }}'></image>
         </block>
       </view>
     </scroll-view>
+    <wux-white-space />
+    <!-- LOGO基本位置按钮 -->
 
+    <view wx:if='{{ logos.length > 0 }}' class='flex-row' style='width: 90vw'>
+      <vant-button plain='{{ logos[currentLogoIndex].location =="ul" ? false: true }}' type="primary" disabled='{{ logos[currentLogoIndex].location =="ul" ? true: false }}' bind:click='onClickLocation' data-position='ul'>左上</vant-button>
+      <vant-button plain='{{ logos[currentLogoIndex].location =="ur" ? false: true }}' type="primary" disabled='{{ logos[currentLogoIndex].location =="ur" ? true: false }}' bind:click='onClickLocation' data-position='ur'>右上</vant-button>
+      <vant-button plain='{{ logos[currentLogoIndex].location =="bl" ? false: true }}' type="primary" disabled='{{ logos[currentLogoIndex].location =="bl" ? true: false }}' bind:click='onClickLocation' data-position='bl'>左下</vant-button>
+      <vant-button plain='{{ logos[currentLogoIndex].location =="br" ? false: true }}' type="primary" disabled='{{ logos[currentLogoIndex].location =="br" ? true: false }}' bind:click='onClickLocation' data-position='br'>右下</vant-button>
+    </view>
+    <!-- <vant-row style='width: 90vw;'>
+      <vant-col span="8">
+        <vant-button plain type="primary" bind:click='onChooseImage'>选择底图</vant-button>
+				<image src=""></image>
+      </vant-col>
+      <vant-col offset="8" span="8">
+        <vant-button plain type="primary" bind:click='onChooseImage'>选择底图</vant-button>
+      </vant-col>
+    </vant-row> -->
+    <wux-white-space />
+    <!-- LOGO缩放按钮 -->
+    <view wx:if='{{ logos.length > 0 }}' class='flex-row' style='width: 90vw; justify-content: space-around;'>
+      <vant-button plain type="primary" bind:click='onClickScale' data-scale='big'>放大</vant-button>
+      <vant-button plain type="primary" bind:click='onClickScale' data-scale='small'>缩小</vant-button>
+    </view>
     <wux-white-space size="large" />
+    <!-- 保存按钮 -->
     <view class='center'>
-      <vant-button plain type="primary" bind:click='onClickSave'>保存图片</vant-button>
+      <vant-button disabled="{{!( images.length > 0 && logos.length > 0 )}}" plain type="primary" bind:click='onClickSave'>保存图片</vant-button>
     </view>
   </block>
 </view>
